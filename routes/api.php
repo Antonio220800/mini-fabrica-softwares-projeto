@@ -2,8 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ProjetoController;
+
 use App\Http\Controllers\Api\ClienteController;
+use App\Http\Controllers\Api\ProjetoController;
+use App\Http\Controllers\Api\LancamentoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +22,4 @@ Route::get('/teste', function () {
 
 Route::apiResource('clientes', ClienteController::class);
 Route::apiResource('projetos', ProjetoController::class);
+Route::apiResource('lancamentos', LancamentoController::class);
