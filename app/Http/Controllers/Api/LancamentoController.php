@@ -11,7 +11,7 @@ class LancamentoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Lancamento::query();
+        $query = Lancamento::with('projeto');
 
         if ($request->projeto_id) {
             $query->where('projeto_id', $request->projeto_id);
@@ -33,17 +33,24 @@ class LancamentoController extends Controller
             'colaborador' => ['required', 'string', 'max:255'],
             'data'        => ['required', 'date'],
             'horas'       => ['required', 'numeric', 'gt:0'],
-            'tipo'        => ['required', Rule::in(['corretiva', 'evolutiva', 'implantacao', 'legislativa'])],
+            'tipo'        => ['required', Rule::in([
+                'corretiva',
+                'evolutiva',
+                'implantacao',
+                'legislativa'
+            ])],
             'descricao'   => ['nullable', 'string'],
         ]);
 
         $lancamento = Lancamento::create($data);
+        $lancamento->load('projeto');
 
         return response()->json($lancamento, 201);
     }
 
     public function show(Lancamento $lancamento)
     {
+        $lancamento->load('projeto');
         return response()->json($lancamento);
     }
 
@@ -54,11 +61,17 @@ class LancamentoController extends Controller
             'colaborador' => ['sometimes', 'string', 'max:255'],
             'data'        => ['sometimes', 'date'],
             'horas'       => ['sometimes', 'numeric', 'gt:0'],
-            'tipo'        => ['sometimes', Rule::in(['corretiva', 'evolutiva', 'implantacao', 'legislativa'])],
+            'tipo'        => ['sometimes', Rule::in([
+                'corretiva',
+                'evolutiva',
+                'implantacao',
+                'legislativa'
+            ])],
             'descricao'   => ['nullable', 'string'],
         ]);
 
         $lancamento->update($data);
+        $lancamento->load('projeto');
 
         return response()->json($lancamento);
     }
